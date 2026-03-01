@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <meta name="theme-color" content="#800020">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="Отдых в Братске">
+    
+    <!-- SEO мета-теги для поисковых систем -->
+    <title>Рекреационные ресурсы Братска - парки, водоемы, достопримечательности на карте</title>
+    <meta name="description" content="Интерактивная карта рекреационных ресурсов Братска: парки культуры, скверы, пляжи, водохранилище, спортивные комплексы, музеи и памятники. Подробные описания, часы работы, контакты.">
+    <meta name="keywords" content="Братск, отдых в Братске, рекреация, парки Братска, водоемы Братска, Братская ГЭС, Ангарская деревня, достопримечательности Братска, куда пойти в Братске, туризм Братск, места для отдыха Братск">
+    <meta name="author" content="Отдых в Братске">
+    <meta name="robots" content="index, follow">
+    <meta name="yandex-verification" content="">
+    <meta name="google-site-verification" content="">
+    
+    <!-- Open Graph мета-теги для социальных сетей -->
+    <meta property="og:title" content="Рекреационные ресурсы Братска">
+    <meta property="og:description" content="Лучшие места для отдыха в Братске на интерактивной карте. Парки, пляжи, спорткомплексы и музеи с подробными описаниями.">
+    <meta property="og:image" content="https://ваш-сайт.ru/images/preview.jpg">
+    <meta property="og:url" content="https://ваш-сайт.ru">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Отдых в Братске">
+    <meta property="og:locale" content="ru_RU">
+    
+    <!-- Twitter Card мета-теги -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Рекреационные ресурсы Братска">
+    <meta name="twitter:description" content="Интерактивная карта мест отдыха в Братске">
+    <meta name="twitter:image" content="https://ваш-сайт.ru/images/preview.jpg">
+    
+    <!-- Дополнительные SEO теги -->
+    <link rel="canonical" href="https://ваш-сайт.ru">
+    <meta name="geo.region" content="RU-IRK">
+    <meta name="geo.placename" content="Братск">
+    <meta name="geo.position" content="56.1325;101.614">
+    <meta name="ICBM" content="56.1325, 101.614">
+    
+    <!-- Фавиконки (замените на свои файлы) -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
+    
+    <!-- Существующие ссылки (не изменены) -->
+    <link rel="preconnect" href="https://unpkg.com">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Далее ваш существующий стиль (без изменений) -->
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: 'Inter', sans-serif; }
+        :root { 
+            --primary: #B22222; --primary-dark: #9b2424; --primary-light: #CD5C5C; 
+            --secondary: #800020; --accent: #DAA520; --dark: #1A0B0B; --darker: #120707; 
+            --light: #FDF5E6; --gray-light: #E8D8C0; --shadow: 0 10px 30px -5px rgba(0,0,0,0.5); 
+            --shadow-hover: 0 20px 40px -10px rgba(0,0,0,0.7); --radius: 20px; --transition: all 0.3s ease; 
+        }
+        body { background: linear-gradient(145deg, #2C0F0F 0%, #1A0B0B 100%); color: var(--light); line-height: 1.6; min-height: 100vh; padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left); }
+        .container { width: 100%; max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+        header { background: rgba(26, 11, 11, 0.98); backdrop-filter: blur(10px); position: fixed; width: 100%; top: 0; z-index: 1000; height: 70px; display: flex; align-items: center; border-bottom: 2px solid var(--primary); box-shadow: var(--shadow); }
+        @media (max-width: 768px) { header { height: 60px; } }
+        nav { display: flex; justify-content: space-between; align-items: center; width: 100%; }
+        .logo { font-size: 1.5rem; font-weight: 800; color: var(--light); display: flex; align-items: center; gap: 10px; text-decoration: none; }
+        .logo-icon { background: linear-gradient(135deg, var(--primary), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 2rem; }
+        .nav-links { display: flex; list-style: none; gap: 0.5rem; }
+        .nav-links a { color: var(--light); text-decoration: none; font-weight: 600; padding: 0.6rem 1.2rem; border-radius: 40px; transition: var(--transition); }
+        .nav-links a:hover, .nav-links a.active { background: var(--primary); color: var(--light); }
+        .mobile-menu-btn { display: none; background: var(--primary); border: none; color: white; width: 44px; height: 44px; border-radius: 30px; align-items: center; justify-content: center; font-size: 1.2rem; cursor: pointer; }
+        .hero { background: linear-gradient(135deg, rgba(26, 11, 11, 0.95), rgba(178, 56, 34, 0.85)), url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover; height: 90vh; margin-top: 70px; border-radius: 0 0 50px 50px; display: flex; align-items: center; text-align: center; color: white; }
+        @media (max-width: 768px) { .hero { margin-top: 60px; height: 80vh; } }
+        .hero-content { width: 100%; padding: 0 20px; }
+        .hero-content h1 { font-size: clamp(2.2rem, 7vw, 5rem); margin-bottom: 1.5rem; font-weight: 800; text-shadow: 0 4px 20px rgba(0,0,0,0.5); }
+        .hero-content p { font-size: clamp(1rem, 2.5vw, 1.4rem); margin-bottom: 2.5rem; max-width: 700px; margin: 0 auto 2.5rem; }
+        .cta-button { background: var(--accent); color: var(--dark); padding: 1.2rem 3rem; border: none; border-radius: 60px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 12px; box-shadow: 0 20px 40px -10px rgba(0,0,0,0.5); transition: var(--transition); }
+        .cta-button:hover { transform: translateY(-4px); background: #F4C542; }
+        .main-content { padding: 4rem 0; }
+        .section { background: rgba(26, 11, 11, 0.7); backdrop-filter: blur(5px); padding: 3rem 2.5rem; margin-bottom: 3rem; border-radius: var(--radius); border: 1px solid var(--primary); box-shadow: var(--shadow); }
+        @media (max-width: 768px) { .section { padding: 2rem 1.5rem; } }
+        .section-header { text-align: center; margin-bottom: 3rem; }
+        .section-header h2 { font-size: clamp(2rem, 5vw, 3rem); color: var(--accent); margin-bottom: 1rem; position: relative; display: inline-block; }
+        .section-header h2::after { content: ''; position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%); width: 80px; height: 4px; background: linear-gradient(90deg, var(--primary), var(--accent)); border-radius: 4px; }
+        .section-header p { color: var(--gray-light); max-width: 700px; margin: 0 auto; }
+        .categories { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; }
+        .category-card { background: rgba(26, 11, 11, 0.9); padding: 2.5rem 2rem; border-radius: var(--radius); text-align: center; cursor: pointer; border: 2px solid transparent; transition: var(--transition); box-shadow: var(--shadow); }
+        .category-card:hover { border-color: var(--accent); transform: translateY(-10px); background: rgba(178, 34, 34, 0.3); }
+        .category-card i { font-size: 3rem; background: linear-gradient(135deg, var(--primary), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 1rem; }
+        .category-card h3 { color: var(--light); font-size: 1.5rem; margin-bottom: 0.8rem; }
+        .objects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 2rem; }
+        .object-card { background: rgba(26, 11, 11, 0.95); border-radius: var(--radius); overflow: hidden; border: 1px solid var(--primary); transition: var(--transition); box-shadow: var(--shadow); }
+        .object-card:hover { transform: translateY(-8px); box-shadow: var(--shadow-hover); border-color: var(--accent); }
+        .object-image { height: 250px; overflow: hidden; position: relative; }
+        .object-image img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
+        .object-card:hover .object-image img { transform: scale(1.1); }
+        .object-image::after { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 50%; background: linear-gradient(to top, rgba(26,11,11,0.8), transparent); }
+        .object-info { padding: 2rem; }
+        .object-info h3 { color: var(--accent); font-size: 1.6rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 10px; }
+        .object-info h3 i { font-size: 1.8rem; color: var(--primary); }
+        .object-description { color: var(--gray-light); margin-bottom: 1.5rem; line-height: 1.7; }
+        .object-details { background: rgba(178, 34, 34, 0.2); padding: 1rem; border-radius: 15px; margin-bottom: 1.5rem; border-left: 4px solid var(--accent); }
+        .object-details p { margin-bottom: 0.5rem; color: var(--light); display: flex; align-items: center; gap: 10px; }
+        .object-details i { color: var(--accent); width: 20px; }
+        .object-meta { display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; }
+        .object-location { background: var(--primary); color: var(--light); padding: 0.6rem 1.2rem; border-radius: 30px; font-size: 0.9rem; font-weight: 600; display: flex; align-items: center; gap: 6px; }
+        .object-btn { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; border: none; padding: 0.7rem 1.5rem; border-radius: 40px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: var(--transition); }
+        .object-btn:hover { background: linear-gradient(135deg, var(--secondary), var(--primary)); transform: scale(1.05); }
+        .map-section { background: rgba(26, 11, 11, 0.7); padding: 3rem 2.5rem; border-radius: var(--radius); border: 1px solid var(--primary); }
+        #map { height: 550px; width: 100%; border-radius: var(--radius); border: 4px solid var(--primary); margin-top: 1.5rem; box-shadow: var(--shadow-hover); z-index: 1; }
+        @media (max-width: 768px) { #map { height: 450px; } }
+        .map-controls { display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; justify-content: center; }
+        .map-btn { background: transparent; color: var(--light); border: 2px solid var(--primary); padding: 0.8rem 1.8rem; border-radius: 50px; cursor: pointer; font-weight: 600; transition: var(--transition); display: flex; align-items: center; gap: 8px; }
+        .map-btn:hover, .map-btn.active { background: var(--primary); color: white; border-color: var(--accent); }
+
+        .fixed-marker { background: transparent; border: none; }
+        .fixed-marker div { 
+            width: 48px !important; 
+            height: 48px !important; 
+            border-radius: 50%; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            color: white; 
+            font-size: 22px; 
+            box-shadow: 0 8px 20px rgba(0,0,0,0.5); 
+            transition: transform 0.2s; 
+            border: 2px solid var(--accent);
+        }
+        .fixed-marker:hover div { transform: scale(1.15); }
+        
+        .leaflet-popup-content-wrapper { background: rgba(26, 11, 11, 0.98); color: var(--light); border-radius: 20px !important; border: 2px solid var(--primary); padding: 0 !important; overflow: hidden; }
+        .leaflet-popup-content { margin: 0 !important; width: 320px !important; }
+        .leaflet-popup-close-button { background: var(--primary) !important; color: white !important; width: 30px !important; height: 30px !important; border-radius: 50% !important; top: 10px !important; right: 10px !important; display: flex !important; align-items: center !important; justify-content: center !important; z-index: 10 !important; }
+        .leaflet-popup-tip { background: rgba(26, 11, 11, 0.98) !important; border: 2px solid var(--primary) !important; }
+        .popup-content { padding: 20px; }
+        .popup-content img { width: 100%; height: 180px; object-fit: cover; border-radius: 12px; margin-bottom: 15px; border: 2px solid var(--primary); }
+        .popup-content h3 { color: var(--accent); font-size: 1.4rem; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+        .popup-content p { color: var(--gray-light); margin-bottom: 15px; line-height: 1.6; }
+        .popup-details { background: rgba(178, 34, 34, 0.2); padding: 10px; border-radius: 10px; margin-bottom: 15px; }
+        .popup-details div { margin-bottom: 5px; display: flex; align-items: center; gap: 8px; }
+        .popup-details i { color: var(--accent); width: 20px; }
+        .popup-btn { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; border: none; padding: 10px 20px; border-radius: 30px; font-weight: 600; cursor: pointer; width: 100%; font-size: 1rem; transition: var(--transition); }
+        .popup-btn:hover { transform: translateY(-2px); background: linear-gradient(135deg, var(--secondary), var(--primary)); }
+        
+        footer { background: var(--darker); color: white; padding: 4rem 0 2rem; margin-top: 5rem; border-top: 4px solid var(--primary); }
+        .footer-content { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 3rem; margin-bottom: 3rem; }
+        .footer-section h3 { color: var(--accent); margin-bottom: 1.5rem; font-size: 1.3rem; }
+        .footer-section p { color: var(--gray-light); margin-bottom: 0.8rem; display: flex; align-items: center; gap: 10px; }
+        .footer-section i { color: var(--primary); width: 20px; }
+        .social-links a { color: white; background: rgba(178, 34, 34, 0.3); width: 44px; height: 44px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; margin-right: 10px; transition: var(--transition); text-decoration: none; }
+        .social-links a:hover { background: var(--primary); transform: translateY(-5px); }
+        .copyright { text-align: center; padding-top: 2rem; border-top: 1px solid rgba(178, 34, 34, 0.3); color: var(--gray-light); }
+        
+        .mobile-nav { position: fixed; top: 70px; right: -100%; width: 280px; height: calc(100vh - 70px); background: var(--darker); transition: right 0.3s; z-index: 999; padding: 2rem; border-left: 2px solid var(--primary); overflow-y: auto; }
+        @media (max-width: 768px) { .mobile-nav { top: 60px; height: calc(100vh - 60px); width: 100%; border-left: none; } }
+        .mobile-nav.active { right: 0; }
+        .mobile-nav a { color: var(--light); text-decoration: none; padding: 1rem; display: flex; align-items: center; gap: 12px; border-radius: 10px; transition: var(--transition); margin-bottom: 0.5rem; }
+        .mobile-nav a:hover, .mobile-nav a.active { background: var(--primary); }
+        @media (max-width: 768px) { .nav-links { display: none; } .mobile-menu-btn { display: flex; } }
+        ::-webkit-scrollbar { width: 10px; background: var(--darker); }
+        ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <a href="#home" class="logo"><span class="logo-icon"><i class="fas fa-tree"></i></span><span>Отдых в Братске</span></a>
+                <ul class="nav-links">
+                    <li><a href="#home" class="active">Главная</a></li>
+                    <li><a href="#categories">Категории</a></li>
+                    <li><a href="#objects">Места</a></li>
+                    <li><a href="#map-section">Карта</a></li>
+                </ul>
+                <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Меню"><i class="fas fa-bars"></i></button>
+            </nav>
+        </div>
+        <div class="mobile-nav" id="mobileNav">
+            <a href="#home" class="active">Главная</a>
+            <a href="#categories">Категории</a>
+            <a href="#objects">Места</a>
+            <a href="#map-section">Карта</a>
+        </div>
+    </header>
+
+    <section class="hero" id="home">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Рекреационные ресурсы Братска</h1>
+                <p>Откройте лучшие места для отдыха, туризма и активного досуга</p>
+                <button class="cta-button" onclick="scrollToSection('categories')"><i class="fas fa-compass"></i> Исследовать места</button>
+            </div>
+        </div>
+    </section>
+
+    <main class="main-content container">
+        <section class="section" id="categories">
+            <div class="section-header"><h2>Категории отдыха</h2><p>Выберите интересующее направление</p></div>
+            <div class="categories">
+                <div class="category-card" onclick="showCategory('parks')"><i class="fas fa-tree"></i><h3>Парки и скверы</h3><p>Зеленые зоны для отдыха</p></div>
+                <div class="category-card" onclick="showCategory('water')"><i class="fas fa-water"></i><h3>Водоемы</h3><p>Озера, реки, пляжи</p></div>
+                <div class="category-card" onclick="showCategory('sport')"><i class="fas fa-running"></i><h3>Спорт</h3><p>Активный отдых</p></div>
+                <div class="category-card" onclick="showCategory('culture')"><i class="fas fa-landmark"></i><h3>Культура</h3><p>Музеи, памятники</p></div>
+            </div>
+        </section>
+
+        <section class="section" id="objects">
+            <div class="section-header"><h2>Популярные места</h2><p>Подробная информация о каждом объекте</p></div>
+            <div class="objects-grid" id="objects-container"></div>
+        </section>
+
+        <section class="map-section" id="map-section">
+            <div class="section-header"><h2>Интерактивная карта</h2><p>Маркеры сохраняют размер при любом масштабе</p></div>
+            <div class="map-controls">
+                <button class="map-btn active" onclick="showAllOnMap()"><i class="fas fa-globe"></i> Все</button>
+                <button class="map-btn" onclick="showCategoryOnMap('parks')"><i class="fas fa-tree"></i> Парки</button>
+                <button class="map-btn" onclick="showCategoryOnMap('water')"><i class="fas fa-water"></i> Водоемы</button>
+                <button class="map-btn" onclick="showCategoryOnMap('sport')"><i class="fas fa-running"></i> Спорт</button>
+                <button class="map-btn" onclick="showCategoryOnMap('culture')"><i class="fas fa-landmark"></i> Культура</button>
+            </div>
+            <div id="map"></div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section"><h3>О проекте</h3><p><i class="fas fa-info-circle"></i> Гид по отдыху в Братске</p><p><i class="fas fa-map-marked-alt"></i> 24+ мест для отдыха</p></div>
+                <div class="footer-section"><h3>Контакты</h3><p><i class="fas fa-envelope"></i> avadakedama@gmail.com</p><p><i class="fas fa-phone"></i> 8 (995) 324-55-92</p><div class="social-links"><a href="#" aria-label="VK"><i class="fab fa-vk"></i></a><a href="#" aria-label="Telegram"><i class="fab fa-telegram"></i></a></div></div>
+                <div class="footer-section"><h3>Информация</h3><p><i class="fas fa-clock"></i> Часы работы могут меняться</p><p><i class="fas fa-sun"></i> Лучшее время: лето</p></div>
+            </div>
+            <div class="copyright"><p>© 2026 Рекреационные ресурсы Братска</p></div>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        (function() {
+            const data = {
+                parks: [
+                    { id: 1, name: "Парк культуры и отдыха", desc: "Центральный парк с аттракционами, фонтанами и зонами отдыха. Любимое место семейных прогулок.", full: "Парк основан в 1960 году. Есть аттракционы, кафе, спортивные площадки. Зимой заливают каток. Проводятся городские праздники.", loc: "Энергетик, ул. Солнечная, 15", coords: [56.304545, 101.760491], color: "#2bbbbb", icon: "fa-tree", img: "https://lh3.googleusercontent.com/gps-cs-s/AHVAweoBGHLIuNv9O2BPyk0UH1ysDvzEQ7R7GoL7HWl1gNDGyHuXJ9iBWw2CtiXhznd8wKrYsOllk638yDjVyRXSDnpLH-b8iII-LlQYFSOGFcLUPYOHaZOdGpfxgVNHMaAW8SoXVMV9=s680-w680-h510-rw", time: "08:00-23:00", price: "Бесплатно" },
+                    { id: 2, name: "Сквер Победы", desc: "Мемориал с вечным огнем в честь героев ВОВ. Ухоженная территория с аллеями.", full: "Открыт в 1975 году. Ежегодно 9 мая проходят торжественные мероприятия. Вечный огонь горит постоянно.", loc: "ул. Обручева, 2", coords: [56.155313, 101.647151], color: "#2bbbbb", icon: "fa-monument", img: "https://cdn.bst.bratsk.ru/storageCore/Uploades/_images_/otherall/2025/2025_YFS0VX55RWPB3X.jpg", time: "Круглосуточно", price: "Бесплатно" },
+                    { id: 3, name: "Ангарские каскады", desc: "Современный сквер с каскадными фонтанами и водопадами. Красивая подсветка вечером.", full: "Открыт в 2020 году. Уникальный ландшафтный дизайн с перепадами высот. Популярное место для фотосессий.", loc: "ул. Подбельского", coords: [56.150541, 101.634188], color: "#2bbbbb", icon: "fa-tree", img: "https://i38.ru/images/stories/2025/December/dsc_0717.jpg", time: "Круглосуточно", price: "Бесплатно" },
+                    { id: 4, name: "Сквер Первостроителей", desc: "Сквер с памятником строителям Братска. Уютное место для прогулок.", full: "Памятник первым строителям города. Есть детская площадка и зона отдыха. Очень зелено и уютно.", loc: "Энергетик, ул. Приморская", coords: [56.296561, 101.766321], color: "#2bbbbb", icon: "fa-hard-hat", img: "https://bratsk.irk.today/wp-content/uploads/sites/2/prazdnichnyy-miting-posvyaschennyy-dnyu-goroda-sostoyalsya-u-pamyatnika-pervostroitelyam-v-bratske-11-683x1024.jpg", time: "Круглосуточно", price: "Бесплатно" },
+                    { id: 15, name: "Молодежный", desc: "Парк с экстрим-площадкой и скейт-парком. Место для активной молодежи.", full: "Скейт-парк с трамплинами, площадка для воркаута, зона для паркура. Регулярно проходят соревнования.", loc: "Энергетик, ул. Южная, 45", coords: [56.3185, 101.7432], color: "#2bbbbb", icon: "fa-users", img: "https://irk.today/wp-content/uploads/img_20250421_150454_763-scaled.jpg", time: "08:00-22:00", price: "Бесплатно" },
+                    { id: 16, name: "Парк Металлургов", desc: "Отличное место для отдыха и времяпровождения. Идеален для семей.", full: "Детские площадки с безопасным покрытием и интересные статуи связанные с мультфильмами. Тихое место.", loc: "Центральный, ул. Свердлова 5", coords: [56.157454, 101.604074], color: "#2bbbbb", icon: "fa-home", img: "https://bst.bratsk.ru/storageCore/Uploades/_images_/otherall/2022/2022_C5MO3L7747VIFO.jpg", time: "Круглосуточно", price: "Бесплатно" }
+                ],
+                water: [
+                    { id: 5, name: "Падунский пляж", desc: "Братское море - место для рыбалки и прогулок. Живописные берега.", full: "Братское водохранилище ('Братское море'). Отличная рыбалка. Аренда катеров, лодок. Места для пикников.", loc: "Набережная Братского моря", coords: [56.285669, 101.72455], color: "#3498db", icon: "fa-umbrella-beach", img: "https://images.fooby.ru/1/79/88/3943722", time: "Круглосуточно", price: "Свободный вход" },
+                    { id: 6, name: "Залив Курчатова", desc: "Залив с чистой водой для купания и пикников. Пологий вход в воду.", full: "Хорошее место с видом на ангарскую деревню, можно ездить вдоль берега на велосипедах и гулять.", loc: "залив Ангары", coords: [56.160805, 101.653914], color: "#3498db", icon: "fa-water", img: "https://images.fooby.ru/2/14/29/5664464", time: "Круглосуточно", price: "Бесплатно" },
+                    { id: 7, name: "Яхт-клуб 'Братск'", desc: "Аренда яхт, обучение парусному спорту. Регаты и водные прогулки.", full: "Аренда яхт с капитаном, обучение. Есть ресторан и гостиница. Регулярно проводятся соревнования.", loc: "Энергетик, берег вдхр.", coords: [56.301037, 101.735431], color: "#3498db", icon: "fa-sailboat", img: "https://rusyachting.ru/data/photos/872/61607ed5e5023.jpg", time: "7:00-23:00", price: "От 1000 руб/час" },
+                    { id: 8, name: "Братское взморье", desc: "Городской пляж с чистым песком. Есть кафе и раздевалки.", full: "Официальный пляж со спасателями. Волейбол, шезлонги, душ. Песок регулярно чистят.", loc: "Поселок Зяба", coords: [56.203553, 101.820057], color: "#3498db", icon: "fa-sun", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTAfHzziAJdncGmxcPF0Xj18At_8dVX38uhaA&s", time: "09:00-21:00", price: "Бесплатно" },
+                    { id: 18, name: "Спорткомплекс Солнечный", desc: "бассейн.", full: "Отличное место, хороший бассейн и большой зал, все тренера хорошие, дают правильные программы тренировок.", loc: "Энергетик, ул солнченая 15.", coords: [56.305088, 101.759550], color: "#3498db", icon: "fa-person-swimming", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSo58rlrH0N5n_RCw8mw-ZoEB3siKWD9xGj2g&s", time: "8:00-22:00", price: "От 500 руб" }
+                ],
+                sport: [
+                    { id: 9, name: "Металлург", desc: "Стадион с футбольным полем и беговыми дорожками. Трибуны на 5000 мест.", full: "Главный стадион города. Натуральный газон, современные беговые дорожки. Проводятся матчи и праздники.", loc: "ул. Комсомольская, 23", coords: [56.158047, 101.610104], color: "#e74c3c", icon: "fa-futbol", img: "https://m.soccer.ru/sites/default/files/map-objects/f934931e6b1de21bb747ea8c7b82750bd8bf1822_big.png", time: "08:00-22:00", price: "Вход свободный" },
+                    { id: 10, name: "Пихтовая гора", desc: "Лыжная база с трассами разной сложности. Прокат оборудования.", full: "Освещенные трассы 3.5 км, перепад 80 м. Прокат лыж, раздевалка, кафе. Проводятся соревнования.", loc: "Центральный, прибрежная зона", coords: [56.18051995412412, 101.70857757798194], color: "#e74c3c", icon: "fa-person-skiing", img: "https://avatars.mds.yandex.net/get-altay/1992662/2a0000016f0a162cd686cf8fccb309939be4/L_height", time: "09:00-21:00", price: "100 руб" },
+                    { id: 11, name: "Таежный", desc: "Спорткомплекс с бассейном, тренажерным залом. Фитнес и йога.", full: "25-метровый бассейн, тренажерный зал, сауна. Секции для детей и взрослых.", loc: "ул. Комсомольская, 45", coords: [56.159211, 101.612144], color: "#e74c3c", icon: "fa-dumbbell", img: "https://sportgyms.ru/uploads/posts/2014-05/1399821706_01.jpg", time: "07:00-23:00", price: "От 300 руб" },
+                    { id: 20, name: "ARNI athletic studio", desc: "Прекрасный тренажерный зал.", full: "тренажерный зал где можно заниматься как кардио тренировками так и физическими.", loc: "ул. Макаренко, 8а", coords: [56.30652534678497, 101.75110630387847], color: "#e74c3c", icon: "fa-table-tennis-paddle-ball", img: "https://avatars.mds.yandex.net/get-altay/15074997/2a0000019646665fc75af00c0d00207a40a7/L_height", time: "08:00-22:00", price: "От 1500 руб/мес" },
+                    { id: 21, name: "Картодром Ангара", desc: "трасса для картинга и дрифт трасса.", full: "Картинг с друзьями и семьей, дрифт на машинах. не дорогая коффейня. Прокат снаряжения.", loc: "трасса Братск-Усть-Кут, 25", coords: [56.283273234579745, 101.79903879965215], color: "#e74c3c", icon: "fa-mountain", img: "https://cachizer3.2gis.com/reviews-photos/a488729d-95f3-4c1e-ae3e-652ef2b2c159.jpg?w=640", time: "10:00-22:00", price: "От 400 руб" }
+                ],
+                culture: [
+                    { id: 12, name: "Братская ГЭС", desc: "Легендарная ГЭС - символ города. Экскурсии на плотину.", full: "Одна из крупнейших ГЭС мира (4500 МВт). Музей истории строительства, смотровая площадка. Экскурсии по записи.", loc: "Энергетик, плотина", coords: [56.2916, 101.7764], color: "#9b59b6", icon: "fa-industry", img: "https://tkgorod.ru/media/filer_public_thumbnails/filer_public/29/b0/29b090af-4089-4206-9263-9600aebaef3f/10730.jpg__1500x1500_q100_ALIAS-1500x1500_subsampling-2.jpg", time: "09:00-18:00", price: "От 300 руб" },
+                    { id: 13, name: "Ангарская деревня", desc: "Музей деревянного зодчества под открытым небом.", full: "35 га, памятники XVII-XX веков: усадьбы, церкви, амбары. Фольклорные праздники, мастер-классы.", loc: "ул. Комсомольская, 1а", coords: [56.221119, 101.678929], color: "#9b59b6", icon: "fa-museum", img: "https://culture38.ru/app/uploads/2023/10/84e7d0225faeb7d4eaedf9bceadfd832.jpeg", time: "10:00-17:00, кроме пн", price: "200 руб" },
+                    { id: 14, name: "Памятник Воинам Интернационалистам", desc: "Монумент воинам-интернационалистам.", full: "Бронзовая фигура солдата на гранитном постаменте. Плиты с именами погибших.", loc: "ул. Олимпийская", coords: [56.311708, 101.740198], color: "#9b59b6", icon: "fa-monument", img: "https://images.fooby.ru/1/95/37/4718058", time: "Круглосуточно", price: "Бесплатно" },
+                    { id: 22, name: "Драматический Театр", desc: "Отличный театр с хорошими актёрами.", full: "отличные выступления, хорошие актеры, прекрасное обслуживание.", loc: "ул. Мира, 37", coords: [56.15682756611791, 101.62315201742082], color: "#9b59b6", icon: "fa-palette", img: "https://culture38.ru/app/uploads/2025/07/image-34-1260x840.png", time: "круглосуточно", price: "бесплатно" },
+                    { id: 23, name: "Смотровая площадка", desc: "смотровая площадка ГЭС.", full: "можно пофоткаться на фоне величайшей братской гэс, так же там крепят замки на забор молодожены (вечером особая красота).", loc: "трасса Братск-Усть-Кут, 25", coords: [56.284423, 101.792439], color: "#9b59b6", icon: "fa-masks-theater", img: "https://static-pano.maps.yandex.ru/v1/?panoid=1680960881_667572824_23_1717401002&size=500%2C240&azimuth=-66.2&tilt=10&api_key=maps&signature=Cp7j48f4PcoOctcJrkDFMsa0viaprXgX-sbigW4yQYQ=", time: "круглосуточно", price: "бесплатно" },
+                    { id: 24, name: "обелиск славы ленинскому комсомолу", desc: "хорошее место .", full: "Он посвящен героическому труду, идейной верности, участию молодежи в строительстве социализма, освоении целины, победе в Великой Отечественной войне.", loc: "падун, мыс пурсей", coords: [56.28889, 101.754499], color: "#9b59b6", icon: "fa-landmark", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSjxWNkrF_HtC2Ql6qWHKUGsrKtA0hsPkgs1g&s", time: "круглосуточно", price: "бесплатно" }
+                ]
+            };
+        
+            let map, markers = [];
+            let mapInitialized = false;
+
+            function initMap() {
+                map = L.map('map').setView([56.1325, 101.614], 12);
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { 
+                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+                    maxZoom: 19
+                }).addTo(map);
+                mapInitialized = true;
+                addAllMarkers();
+            }
+
+            function createMarker(obj) {
+                const iconHtml = `<div style="background: linear-gradient(135deg, ${obj.color}, ${obj.color}dd);"><i class="fas ${obj.icon}"></i></div>`;
+                const icon = L.divIcon({ 
+                    className: 'fixed-marker', 
+                    html: iconHtml, 
+                    iconSize: [48, 48], 
+                    iconAnchor: [24, 24], 
+                    popupAnchor: [0, -24] 
+                });
+                
+                const marker = L.marker(obj.coords, { icon }).addTo(map);
+                
+                const popupContent = `
+                    <div class="popup-content">
+                        <img src="${obj.img}" alt="${obj.name}" loading="lazy">
+                        <h3><i class="fas ${obj.icon}" style="color:${obj.color};"></i> ${obj.name}</h3>
+                        <p>${obj.full || obj.desc}</p>
+                        <div class="popup-details">
+                            <div><i class="fas fa-map-pin"></i> ${obj.loc}</div>
+                            <div><i class="fas fa-clock"></i> ${obj.time}</div>
+                            <div><i class="fas fa-tag"></i> ${obj.price}</div>
+                        </div>
+                        <button class="popup-btn" onclick="focusOn(${obj.id})"><i class="fas fa-search-plus"></i> Подробнее</button>
+                    </div>`;
+                
+                marker.bindPopup(popupContent, { maxWidth: 320 });
+                
+                let category;
+                if (obj.id <= 4 || obj.id === 15 || obj.id === 16) category = 'parks';
+                else if (obj.id >= 5 && obj.id <= 8 || obj.id === 18) category = 'water';
+                else if (obj.id >= 9 && obj.id <= 11 || obj.id >= 19 && obj.id <= 21) category = 'sport';
+                else category = 'culture';
+                
+                markers.push({ marker, category, id: obj.id });
+                return marker;
+            }
+
+            function clearMarkers() {
+                markers.forEach(m => map.removeLayer(m.marker));
+                markers = [];
+            }
+
+            function addAllMarkers() {
+                clearMarkers();
+                Object.values(data).flat().forEach(obj => createMarker(obj));
+            }
+
+            window.showAllOnMap = function() {
+                if (!mapInitialized) initMap();
+                else {
+                    clearMarkers();
+                    addAllMarkers();
+                    map.setView([56.1325, 101.614], 12);
+                }
+                updateMapButtons('all');
+                closeMenu();
+                scrollToSection('map-section');
+            }
+
+            window.showCategoryOnMap = function(category) {
+                if (!mapInitialized) initMap();
+                clearMarkers();
+                
+                const objects = data[category] || [];
+                const bounds = [];
+                
+                objects.forEach(obj => {
+                    createMarker(obj);
+                    bounds.push(obj.coords);
+                });
+                
+                if (bounds.length) {
+                    map.fitBounds(L.latLngBounds(bounds), { padding: [50, 50] });
+                }
+                
+                updateMapButtons(category);
+                closeMenu();
+                scrollToSection('map-section');
+            }
+
+            function updateMapButtons(activeCategory) {
+                const buttons = document.querySelectorAll('.map-btn');
+                const categories = ['all', 'parks', 'water', 'sport', 'culture'];
+                
+                buttons.forEach((btn, index) => {
+                    if (categories[index] === activeCategory) {
+                        btn.classList.add('active');
+                    } else {
+                        btn.classList.remove('active');
+                    }
+                });
+            }
+
+            window.focusOn = function(id) {
+                let obj, category;
+                for (let cat in data) {
+                    const found = data[cat].find(item => item.id == id);
+                    if (found) {
+                        obj = found;
+                        category = cat;
+                        break;
+                    }
+                }
+                
+                if (obj && mapInitialized) {
+                    map.setView(obj.coords, 16);
+                    
+                    setTimeout(() => {
+                        const markerObj = markers.find(m => m.id == id);
+                        if (markerObj) {
+                            markerObj.marker.openPopup();
+                        }
+                    }, 300);
+                    
+                    scrollToSection('map-section');
+                } else if (obj && !mapInitialized) {
+                    initMap();
+                    setTimeout(() => {
+                        map.setView(obj.coords, 16);
+                        const markerObj = markers.find(m => m.id == id);
+                        if (markerObj) {
+                            markerObj.marker.openPopup();
+                        }
+                    }, 500);
+                }
+            }
+
+            window.showCategory = function(category) {
+                const container = document.getElementById('objects-container');
+                const objects = data[category] || [];
+                
+                container.innerHTML = objects.map(obj => `
+                    <div class="object-card">
+                        <div class="object-image"><img src="${obj.img}" loading="lazy" alt="${obj.name}"></div>
+                        <div class="object-info">
+                            <h3><i class="fas ${obj.icon}" style="color:${obj.color};"></i> ${obj.name}</h3>
+                            <div class="object-description">${obj.full || obj.desc}</div>
+                            <div class="object-details">
+                                <p><i class="fas fa-map-pin"></i> ${obj.loc}</p>
+                                <p><i class="fas fa-clock"></i> ${obj.time}</p>
+                                <p><i class="fas fa-tag"></i> ${obj.price}</p>
+                            </div>
+                            <div class="object-meta">
+                                <span class="object-location"><i class="fas fa-map-marker-alt"></i> ${obj.loc.split(',')[0]}</span>
+                                <button class="object-btn" onclick="focusOn(${obj.id})"><i class="fas fa-map-marked-alt"></i> На карте</button>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+                
+                scrollToSection('objects');
+                closeMenu();
+            }
+
+            window.scrollToSection = function(sectionId) {
+                const element = document.getElementById(sectionId);
+                if (element) {
+                    const offset = 70;
+                    window.scrollTo({
+                        top: element.offsetTop - offset,
+                        behavior: 'smooth'
+                    });
+                }
+            }
+
+            function toggleMenu() {
+                const nav = document.getElementById('mobileNav');
+                const btn = document.getElementById('mobileMenuBtn');
+                nav.classList.toggle('active');
+                btn.innerHTML = nav.classList.contains('active') ? '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
+            }
+
+            window.closeMenu = function() {
+                const nav = document.getElementById('mobileNav');
+                const btn = document.getElementById('mobileMenuBtn');
+                nav.classList.remove('active');
+                btn.innerHTML = '<i class="fas fa-bars"></i>';
+            }
+
+            function setupAnchorLinks() {
+                document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                    anchor.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        const id = this.getAttribute('href').substring(1);
+                        if (id) {
+                            scrollToSection(id);
+                            closeMenu();
+                            
+                            document.querySelectorAll('.nav-links a, .mobile-nav a').forEach(link => {
+                                link.classList.remove('active');
+                                if (link.getAttribute('href') === `#${id}`) {
+                                    link.classList.add('active');
+                                }
+                            });
+                        }
+                    });
+                });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+                showCategory('parks');
+                
+                setTimeout(initMap, 500);
+                
+                // Мобильное меню
+                document.getElementById('mobileMenuBtn').addEventListener('click', toggleMenu);
+                
+                document.querySelectorAll('.mobile-nav a').forEach(link => {
+                    link.addEventListener('click', closeMenu);
+                });
+                
+                setupAnchorLinks();
+                
+                window.addEventListener('resize', function() {
+                    if (map) {
+                        setTimeout(() => map.invalidateSize(), 100);
+                    }
+                });
+            });
+        })();
+    </script>
+</body>
+</html>
